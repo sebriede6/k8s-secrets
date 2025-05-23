@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-config-app-deployment
+  labels:
+    app: my-config-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-config-app
+  template:
+    metadata:
+      labels:
+        app: my-config-app
+    spec:
+      containers:
+        - name: my-config-app-container
+          image: sebriede66/my-config-app:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+            - name: GREETING_MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: GREETING_MESSAGE
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: my-app-config
+                  key: LOG_LEVEL
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secret
+                  key: DB_PASSWORD
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secret
+                  key: API_KEY
+          volumeMounts:
+            - name: app-config-volume
+              mountPath: "/etc/app/config"
+              readOnly: true
+            - name: app-secret-volume
+              mountPath: "/etc/app/secrets"
+              readOnly: true
+      volumes:
+        - name: app-config-volume
+          configMap:
+            name: my-app-config
+        - name: app-secret-volume
+          secret:
+            secretName: my-app-secret

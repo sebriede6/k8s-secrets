@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-app-config 
+data:
+  GREETING_MESSAGE: "Hallo von der ConfigMap aus Kubernetes!"
+  LOG_LEVEL: "debug"
+  app.properties: |
+    feature.enabled=true
+    api.timeout=5000
+    ui.theme=dark
+  
+  
+  
