@@ -11,7 +11,7 @@ Ziel war es, eine Anwendung zu deployen, die ihre nicht-sensible Konfiguration a
 *   **`k8s-config-app/`**: Enthält die einfache Node.js-Anwendung (`app.js`), ihr `Dockerfile` und `package.json`.
 *   **`kubernetes/`**:
     *   `app-configmap.yaml`: Definition der Kubernetes ConfigMap.
-    *   `app-secret.yaml`: Definition des Kubernetes Secrets. **Hinweis:** Die in diesem Repository versionierte `app-secret.yaml` enthält nur Platzhalterwerte. Für ein funktionsfähiges Deployment müssen echte Werte verwendet werden, vorzugsweise durch `kubectl create secret generic ... --from-literal` oder durch eine lokale, nicht versionierte Kopie dieser Datei mit echten Werten.
+    *   `app-secret.yaml`: Definition des Kubernetes Secrets. **Hinweis:** Die in diesem Repository versionierte `app-secret.yaml` ist in der .gitignore. Für ein funktionsfähiges Deployment müssen echte Werte und natürlich die die secrets.yaml selbst (welche hier fehlt) verwendet werden, vorzugsweise durch `kubectl create secret generic ... --from-literal`.
     *   `app-deployment.yaml`: Definition des Kubernetes Deployments für die Node.js-Anwendung, das ConfigMap und Secret referenziert.
     *   `app-service.yaml`: Definition des Kubernetes Service (Typ NodePort) für die Anwendung.
     *   `k8s-configmap-secret-reflection.md`: Schriftliche Antworten auf die Reflexionsfragen.
@@ -24,7 +24,7 @@ Ziel war es, eine Anwendung zu deployen, die ihre nicht-sensible Konfiguration a
     *   `kubectl` konfiguriert, um auf dieses Cluster zu zeigen.
     *   Docker Hub Account (oder andere Registry) und das Anwendungs-Image (`DEIN_DOCKERHUB_BENUTZERNAME/my-config-app:latest`) dorthin gepusht.
 
-2.  **Image bauen und pushen (falls noch nicht geschehen):**
+2.  **Image bauen und pushen:**
     ```bash
     cd k8s-config-app
     docker build -t DEIN_DOCKERHUB_BENUTZERNAME/my-config-app:latest .
