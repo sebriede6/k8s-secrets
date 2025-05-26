@@ -1,12 +1,10 @@
-// k8s-config-app/app.js
 const express = require('express');
 const winston = require('winston');
 const fs = require('fs');
 const path = require('path');
 
-// Einfache Winston Logger Konfiguration
 const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info', // Konfigurierbar über ENV
+  level: process.env.LOG_LEVEL || 'info', 
   format: winston.format.combine(
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     winston.format.json()
@@ -22,14 +20,14 @@ const logger = winston.createLogger({
 });
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Konfigurierbar über ENV
+const PORT = process.env.PORT || 3000; 
 
-// --- Konfigurationswerte aus Umgebungsvariablen ---
+
 const greetingMessage = process.env.GREETING_MESSAGE || "Hallo Welt (Default)!";
-const dbPassword = process.env.DB_PASSWORD; // Sensibel!
-const apiKey = process.env.API_KEY;         // Sensibel!
+const dbPassword = process.env.DB_PASSWORD; 
+const apiKey = process.env.API_KEY;         
 
-// --- Konfigurationswerte aus gemounteten Dateien (optional, aber empfohlen) ---
+
 const configFilePath = '/etc/app/config/app.properties';
 const secretFilePath = '/etc/app/secrets/credentials.txt';
 
@@ -51,20 +49,20 @@ try {
   logger.warn(`Konnte Secret-Datei nicht lesen: ${secretFilePath}`, { error: err.message });
 }
 
-// Logging der Konfiguration beim Start
+
 logger.info("===== Anwendungskonfiguration Geladen =====");
 logger.info(`PORT: ${PORT}`);
 logger.info(`LOG_LEVEL: ${process.env.LOG_LEVEL || 'info (default)'}`);
 logger.info(`GREETING_MESSAGE (aus ENV): ${greetingMessage}`);
 
-// WICHTIG: Sensible Daten nicht direkt loggen! Nur anzeigen, DASS sie gesetzt sind.
+
 if (dbPassword) {
-  logger.info("DB_PASSWORD (aus ENV): [GESETZT]"); // Nicht den Wert loggen!
+  logger.info("DB_PASSWORD (aus ENV): [GESETZT]"); 
 } else {
   logger.warn("DB_PASSWORD (aus ENV): [NICHT GESETZT]");
 }
 if (apiKey) {
-  logger.info("API_KEY (aus ENV): [GESETZT]"); // Nicht den Wert loggen!
+  logger.info("API_KEY (aus ENV): [GESETZT]"); 
 } else {
   logger.warn("API_KEY (aus ENV): [NICHT GESETZT]");
 }
@@ -73,9 +71,7 @@ logger.info(`Inhalt von ${configFilePath} (aus Volume):`);
 fileConfigContent.split('\n').forEach(line => logger.info(`  ${line.trim()}`));
 
 logger.info(`Inhalt von ${secretFilePath} (aus Volume):`);
-// Auch hier, wenn es strukturierte sensible Daten wären, nur Platzhalter loggen.
-// Für eine einfache Textdatei ist es hier zur Demo okay, den Inhalt zu loggen,
-// aber in Produktion würde man das für sensible Dateien vermeiden.
+
 secretFileContent.split('\n').forEach(line => logger.info(`  ${line.trim()}`));
 logger.info("==========================================");
 
